@@ -4,4 +4,4 @@
 
 ## ordersync.sql 数据库结构文件
 
-## back.bat 数据库备份脚本
+## fetch_order_patch 序号补丁
