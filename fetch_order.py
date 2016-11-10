@@ -9,7 +9,7 @@ import time, datetime
 BROWSER_HEADER = {"Cookie" : "shopCategory=food; device_uuid=YmRjYTkxOWItYzU4Ni00MmMwLTg0NGUtYmIxYjliMDUwYmYy; JSESSIONID=18gvdqg3aab410up0omyvjmag; wpush_server_url=wss://wpush.meituan.com"}
 # 登录用户信息
 LOGIN_ACCOUNT = [
-  {"userName": "tangjiang", "password": "tangjiang123", "imgVerifyValue": "", "service": ""}
+  {"userName": "", "password": "", "imgVerifyValue": "", "service": ""}
 ]
 # 请求基地址
 BASE_URL = "http://e.waimai.meituan.com/v2/"
