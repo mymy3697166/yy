@@ -49,7 +49,6 @@ def split_recipient_name(name):
     ng = name.split("(")
     return (ng[0], ng[1].split(")")[0])
 def fetch_valid_order(sdate, edate, page):
-  print page
   qparams = "getNewVo=1&wmOrderPayType=-2&wmOrderStatus=%s&sortField=1&startDate=%s&endDate=%s&pageNum=%s"
   qR = get(FETCH_ORDER_URL + "?%s"%(qparams%(8, sdate, edate, page))) 
   sparams = [{"wmOrderId": o["id"], "wmPoiId": o["wm_poi_id"], "logisticsStatus": o["logistics_status"], "logisticsCode": ("" if o["logistics_code"] == None or o["logistics_code"] == "" else int(o["logistics_code"]))} for o in qR["wmOrderList"]]
@@ -71,23 +70,28 @@ def fetch_invalid_order(sdate, edate, page):
   return qR["pageCount"]
 def insertDb(data, shippers, distances, backinfo = None):
   for i in data:
-    cursor.execute("select count(*) from meituanorder where order_id=%s"%(i["id"]))
+    cursor.execute("select count(*) from meituanorder where wm_order_id_view='%s'"%(i["wm_order_id_view_str"]))
     count = cursor.fetchone()
     if count[0] > 0:
       continue
     uR = get(FETCH_RECIPIENT_URL + "?wmPoiId=%s&wmOrderId=%s"%(i["wm_poi_id"], i["id"]))
     name, gender = split_recipient_name(i["recipient_name"])
     distance = [d["distance"] for d in distances if d["wm_order_id_view"] == i["wm_order_id_view_str"]][0]
-    sql = """insert into meituanorder values(%s,'%s',%s,'%s',NULL,NULL,'%s','%s','%s','%s',%s,
-      %s,%s,'%s','%s',%s,%s,%s,'%s','%s',NULL,
-      NULL,%s,'%s','%s','%s',NULL,NULL,NULL,'%s',%s,
-      %s,'%s',NULL,NULL,NULL,NULL,'%s','%s','%s',%s)"""%(i["id"],i["wm_order_id_view_str"],i["wm_poi_id"],
+    sql = """insert into meituanorder(order_id,wm_order_id_view,app_poi_code,wm_poi_name,wm_poi_address,wm_poi_phone,
+      recipient_address,recipient_phone,recipient_name,recipient_gender,shipping_fee,total,original_price,caution,
+      shipper_phone,status,city_id,has_invoiced,invoice_title,ctime,utime,delivery_time,is_third_shipping,latitude,
+      longitude,order_send_time,order_receive_time,order_confirm_time,order_cancel_time,order_completed_time,logistics_status,
+      logistics_id,logistics_name,logistics_send_time,logistics_confirm_time,logistics_cancel_time,logistics_fetch_time,
+      logistics_completed_time,logistics_dispatcher_name,logistics_dispatcher_mobile,distance,num)values(%s,'%s',%s,'%s',NULL,
+      NULL,'%s','%s','%s','%s',%s,%s,%s,'%s','%s',%s,%s,%s,'%s','%s',NULL,NULL,%s,'%s','%s','%s',NULL,NULL,NULL,'%s',%s,
+      %s,'%s',NULL,NULL,NULL,NULL,'%s','%s','%s',%s,'%s')"""%(i["id"],i["wm_order_id_view_str"],i["wm_poi_id"],
       i["poi_name"],i["recipient_address"],uR["data"],name,gender,i["shipping_fee"],i["total_after"],
       i["total_before"],i["remark"],shippers[str(i["id"])]["dispatcher_phone"],i["status"],i["poi_city_id"],
       i["has_been_invoiced"],i["invoice_title"],i["order_time_fmt"],shippers[str(i["id"])]["is_third_part_shipping"],
       i["address_latitude"],i["address_longitude"],i["order_time_fmt"],c2t(shippers[str(i["id"])]["latest_delivery_time"]),
       i["logistics_status"],shippers[str(i["id"])]["logistics_id"],shippers[str(i["id"])]["logistics_name"],
-      c2t(shippers[str(i["id"])]["latest_delivery_time"]),shippers[str(i["id"])]["dispatcher_name"],shippers[str(i["id"])]["dispatcher_phone"],distance)
+      c2t(shippers[str(i["id"])]["latest_delivery_time"]),shippers[str(i["id"])]["dispatcher_name"],
+      shippers[str(i["id"])]["dispatcher_phone"],distance,i["num"])
     cursor.execute(sql)
     for c in i["cartDetailVos"][0]["details"]:
       csql = """insert into meituanorderdetail(order_id,app_food_code,food_name,quantity,price,box_num,box_price,unit,origin_price)
