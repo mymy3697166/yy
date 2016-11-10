@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2016-10-21 16:33:21
+Date: 2016-11-10 13:34:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -30,31 +30,32 @@ CREATE TABLE `fetchtime` (
 -- ----------------------------
 DROP TABLE IF EXISTS `meituanorder`;
 CREATE TABLE `meituanorder` (
-  `order_id` bigint(11) NOT NULL COMMENT '订单ID',
-  `wm_order_id_view` varchar(255) DEFAULT NULL COMMENT '订单展示ID',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` bigint(11) DEFAULT NULL COMMENT '订单ID',
+  `wm_order_id_view` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '订单展示ID',
   `app_poi_code` int(11) DEFAULT NULL COMMENT 'APP方商家ID',
-  `wm_poi_name` varchar(255) DEFAULT NULL COMMENT '美团商家名称',
-  `wm_poi_address` varchar(255) DEFAULT NULL COMMENT '美团商家地址',
-  `wm_poi_phone` varchar(255) DEFAULT NULL COMMENT '美团商家电话',
-  `recipient_address` varchar(255) DEFAULT NULL COMMENT '收件人地址',
-  `recipient_phone` varchar(255) DEFAULT NULL COMMENT '收件人电话',
-  `recipient_name` varchar(255) DEFAULT NULL COMMENT '收件人姓名',
-  `recipient_gender` varchar(255) DEFAULT NULL COMMENT '收件人性别',
+  `wm_poi_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '美团商家名称',
+  `wm_poi_address` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '美团商家地址',
+  `wm_poi_phone` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '美团商家电话',
+  `recipient_address` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '收件人地址',
+  `recipient_phone` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '收件人电话',
+  `recipient_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '收件人姓名',
+  `recipient_gender` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '收件人性别',
   `shipping_fee` double DEFAULT NULL COMMENT '门店配送费',
   `total` double DEFAULT NULL COMMENT '总价',
   `original_price` double DEFAULT NULL COMMENT '原价',
-  `caution` varchar(255) DEFAULT NULL COMMENT '忌口或备注',
-  `shipper_phone` varchar(255) DEFAULT NULL COMMENT '送餐员电话',
+  `caution` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '忌口或备注',
+  `shipper_phone` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '送餐员电话',
   `status` int(11) DEFAULT NULL COMMENT '订单状态 订单当前状态code，详情请参考13.1节',
   `city_id` int(11) DEFAULT NULL COMMENT '城市ID(目前暂时用不到此信息)',
   `has_invoiced` int(11) DEFAULT NULL COMMENT '是否开发票',
-  `invoice_title` varchar(255) DEFAULT NULL COMMENT '发票抬头',
+  `invoice_title` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '发票抬头',
   `ctime` datetime DEFAULT NULL COMMENT '创建时间',
   `utime` datetime DEFAULT NULL COMMENT '更新时间',
   `delivery_time` datetime DEFAULT NULL COMMENT '用户预计送达时间，“立即送达”时为0',
   `is_third_shipping` int(11) DEFAULT NULL COMMENT '是否是第三方配送平台配送（0否；1是） pay_type 支付类型（1货到付款；2在线支付）',
-  `latitude` varchar(255) DEFAULT NULL COMMENT ' 实际送餐地址纬度',
-  `longitude` varchar(255) DEFAULT NULL COMMENT '实际送餐地址经度',
+  `latitude` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT ' 实际送餐地址纬度',
+  `longitude` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '实际送餐地址经度',
   `order_send_time` datetime DEFAULT NULL COMMENT '用户下单时间',
   `order_receive_time` datetime DEFAULT NULL COMMENT '143254561110 , 商户收到时间',
   `order_confirm_time` datetime DEFAULT NULL COMMENT '143254561110 , 商户确认时间',
@@ -62,17 +63,18 @@ CREATE TABLE `meituanorder` (
   `order_completed_time` datetime DEFAULT NULL COMMENT ' 143254562340, 订单完成时间',
   `logistics_status` int(11) DEFAULT NULL COMMENT ' 20, 配送订单状态code，若is_mt_logistics不为1则此字段为空，详情请参考13.5.1节',
   `logistics_id` bigint(11) DEFAULT NULL COMMENT '7, 配送方ID，若is_mt_logistics不为1则此字段为空',
-  `logistics_name` varchar(255) DEFAULT NULL COMMENT '斑马快送, 配送方名称，若is_mt_logistics不为1则此字段为空',
+  `logistics_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '斑马快送, 配送方名称，若is_mt_logistics不为1则此字段为空',
   `logistics_send_time` datetime DEFAULT NULL COMMENT '143254562350, 配送单下单时间，若is_mt_logistics不为1则此字段为空',
   `logistics_confirm_time` datetime DEFAULT NULL COMMENT '143254561110 , 配送单确认时间，若is_mt_logistics不为1则此字段为空',
   `logistics_cancel_time` datetime DEFAULT NULL COMMENT '143254562340, 配送单取消时间，若is_mt_logistics不为1则此字段为空',
   `logistics_fetch_time` datetime DEFAULT NULL COMMENT '143254562340, 骑手取单时间，若is_mt_logistics不为1则此字段为空',
   `logistics_completed_time` datetime DEFAULT NULL COMMENT ' 143254562340, 配送单完成时间，若is_mt_logistics不为1则此字段为空',
-  `logistics_dispatcher_name` varchar(255) DEFAULT NULL COMMENT '143254562340, 骑手姓名，若is_mt_logistics不为1则此字段为空',
-  `logistics_dispatcher_mobile` varchar(255) DEFAULT NULL COMMENT ' 143254562340, 骑手电话，若is_mt_logistics不为1则此字段为空',
+  `logistics_dispatcher_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '143254562340, 骑手姓名，若is_mt_logistics不为1则此字段为空',
+  `logistics_dispatcher_mobile` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT ' 143254562340, 骑手电话，若is_mt_logistics不为1则此字段为空',
   `distance` double(11,0) DEFAULT NULL COMMENT '收货人距店铺的距离（单位米）',
-  PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `num` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '订单序号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3634 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for meituanorderbackinfo
@@ -107,7 +109,7 @@ CREATE TABLE `meituanorderdetail` (
   `unit` varchar(255) DEFAULT NULL COMMENT '单位',
   `origin_price` double DEFAULT NULL COMMENT '折扣',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21522 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7438 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for meituanorderextras
@@ -120,5 +122,5 @@ CREATE TABLE `meituanorderextras` (
   `remark` varchar(255) DEFAULT NULL COMMENT '满10元减2.5元,（优惠说明）',
   `category` int(11) DEFAULT NULL COMMENT '活动类型',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18485 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7264 DEFAULT CHARSET=utf8mb4;
 SET FOREIGN_KEY_CHECKS=1;
