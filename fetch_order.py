@@ -85,13 +85,14 @@ def insertDb(data, shippers, distances, backinfo = None):
       logistics_completed_time,logistics_dispatcher_name,logistics_dispatcher_mobile,distance,num)values(%s,'%s',%s,'%s',NULL,
       NULL,'%s','%s','%s','%s',%s,%s,%s,'%s','%s',%s,%s,%s,'%s','%s',NULL,NULL,%s,'%s','%s','%s',NULL,NULL,NULL,'%s',%s,
       %s,'%s',NULL,NULL,NULL,NULL,'%s','%s','%s',%s,'%s')"""%(i["id"],i["wm_order_id_view_str"],i["wm_poi_id"],
-      i["poi_name"],i["recipient_address"],uR["data"],name,gender,i["shipping_fee"],i["total_after"],
+      i["poi_name"],i["recipient_address"],uR["data"]["recipientPhone"],name,gender,i["shipping_fee"],i["total_after"],
       i["total_before"],i["remark"],shippers[str(i["id"])]["dispatcher_phone"],i["status"],i["poi_city_id"],
       i["has_been_invoiced"],i["invoice_title"],i["order_time_fmt"],shippers[str(i["id"])]["is_third_part_shipping"],
       i["address_latitude"],i["address_longitude"],i["order_time_fmt"],c2t(shippers[str(i["id"])]["latest_delivery_time"]),
       i["logistics_status"],shippers[str(i["id"])]["logistics_id"],shippers[str(i["id"])]["logistics_name"],
       c2t(shippers[str(i["id"])]["latest_delivery_time"]),shippers[str(i["id"])]["dispatcher_name"],
       shippers[str(i["id"])]["dispatcher_phone"],distance,i["num"])
+    print sql
     cursor.execute(sql)
     for c in i["cartDetailVos"][0]["details"]:
       csql = """insert into meituanorderdetail(order_id,app_food_code,food_name,quantity,price,box_num,box_price,unit,origin_price)
