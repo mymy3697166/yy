@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS `fetchtime`;
 CREATE TABLE `fetchtime` (
   `target` varchar(32) NOT NULL,
   `next_time` date NOT NULL,
+  `file` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '所属文件名',
   PRIMARY KEY (`target`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
